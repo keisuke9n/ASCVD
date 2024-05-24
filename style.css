@@ -1,12 +1,34 @@
 body {
     font-family: Arial, sans-serif;
+    background: #f4f4f9;
+    color: #333;
+    padding: 20px;
 }
-section {
-    margin-bottom: 20px;
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
 label {
-    margin-right: 10px;
+    display: block;
+    margin-bottom: 5px;
 }
-input, select {
+
+select, button {
+    width: 100%;
+    padding: 8px;
     margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
 }
