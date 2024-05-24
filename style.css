@@ -1,0 +1,12 @@
+body {
+    font-family: Arial, sans-serif;
+}
+section {
+    margin-bottom: 20px;
+}
+label {
+    margin-right: 10px;
+}
+input, select {
+    margin-bottom: 10px;
+}
