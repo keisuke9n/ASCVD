@@ -4,7 +4,7 @@ body {
     color: #333;
     margin: 0;
     padding: 20px;
-    font-size: 16px; /* 基本フォントサイズを大きく */
+    font-size: 16px; /* 基本フォントサイズを適切に設定 */
 }
 
 .container {
@@ -18,17 +18,17 @@ body {
 
 label {
     display: block;
-    margin-bottom: 5px;
-    font-size: 18px; /* ラベルのフォントサイズを大きく */
+    margin-bottom: 10px;
+    font-size: 18px; /* ラベルのフォントサイズをさらに大きく */
 }
 
 select, button {
     width: 100%;
-    padding: 15px; /* パディングを増やしてタッチしやすく */
+    padding: 16px; /* パディングをさらに大きく */
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 18px; /* セレクトボックスとボタンのフォントサイズを大きく */
+    border: 2px solid #ccc; /* 境界線を強調 */
+    font-size: 18px; /* セレクトボックスとボタンのフォントサイズをさらに大きく */
 }
 
 button {
@@ -38,5 +38,6 @@ button {
 }
 
 #results {
-    font-size: 20px; /* 結果表示のフォントサイズを大きく */
+    font-size: 20px; /* 結果表示のフォントサイズをさらに大きく */
+    margin-top: 20px; /* 結果部分の上のマージンを追加 */
 }
