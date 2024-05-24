@@ -40,4 +40,5 @@ function calculateRisk() {
 
     document.getElementById('riskScore').innerText = riskScore;
     document.getElementById('tenYearRisk').innerText = tenYearRisk.toFixed(1) + '%';
+
 }
