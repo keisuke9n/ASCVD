@@ -31,8 +31,13 @@ function calculateRisk() {
     ];
 
     let riskScore = gender + bloodPressure + metabolismDisorder + ldl + hdl + (smoking * 2);
-    let tenYearRisk = riskScoreTo10YRisk[riskScore][ageRange];
+    // riskScoreを配列の範囲内に制限
+    riskScore = Math.min(riskScore, riskScoreTo10YRisk.length - 1);
+    // ageRangeを配列の範囲内に制限
+    const validAgeRange = Math.min(ageRange, riskScoreTo10YRisk[0].length - 1);
 
-    document.getElementById('riskScore').innerText = riskStreamlilink_textnkScore;
-    document.getElementById('tenYearRisk').innerText = tenYearRisk.toFixed(1);
+    let tenYearRisk = riskScoreTo10YRisk[riskScore][validAgeRange];
+
+    document.getElementById('riskScore').innerText = riskScore;
+    document.getElementById('tenYearRisk').innerText = tenYearRisk.toFixed(1) + '%';
 }
