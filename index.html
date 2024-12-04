@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta name="keywords" content="atherosclerosis,ASCVD,MI,CVリスク,stroke,ACS,risk,心筋梗塞,脳梗塞,心臓死,久山町,久山町研究,日本,動脈硬化">
+<meta name="description" content="ASCVD 10y-risk calculator for Japanese patients without cardiovascular history">
+<head>
+    <meta charset="UTF8">
+    <title>ASCVD Risk Calculator 10y Japanese hisayama ten-year stroke MI ACS</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        label {
+            font-size: 18px;
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .option {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            flex-grow: 1;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .option.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        #results span {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ASCVD Risk Calculator</h1>
+        <form id="ascvdForm">
+            <div class="form-group">
+                <label for="ageRange">Age:</label>
+                <select id="ageRange">
+                    <option value="0">40-49</option>
+                    <option value="1">50-59</option>
+                    <option value="2">60-69</option>
+                    <option value="3">70-79</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Gender:</label>
+                <div class="options-container" id="genderOptions">
+                    <div class="option" data-value="0">Female</div>
+                    <div class="option" data-value="7">Male</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Systolic Blood Pressure:</label>
+                <select id="bloodPressure">
+                    <option value="0">&lt;120</option>
+                    <option value="1">120-129</option>
+                    <option value="2">130-139</option>
+                    <option value="3">140-159</option>
+                    <option value="4">&gt;160</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>IGT (Impaired Glucose Tolerance):</label>
+                <div class="options-container" id="metabolismOptions">
+                    <div class="option" data-value="0">No</div>
+                    <div class="option" data-value="1">Yes</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>LDL Cholesterol:</label>
+                <select id="ldl">
+                    <option value="0">&lt;120</option>
+                    <option value="1">120-139</option>
+                    <option value="2">140-159</option>
+                    <option value="3">&gt;160</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>HDL Cholesterol:</label>
+                <select id="hdl">
+                    <option value="0">&gt;60</option>
+                    <option value="1">40-59</option>
+                    <option value="2">&lt;40</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Smoking:</label>
+                <div class="options-container" id="smokingOptions">
+                    <div class="option" data-value="0">No</div>
+                    <div class="option" data-value="1">Yes</div>
+                </div>
+            </div>
+
+            <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+        </form>
+        <div id="results">
+            <h2>Results</h2>
+            <p>Risk Score: <span id="riskScore">0</span></p>
+            <p>10Y Risk: <span id="tenYearRisk">0%</span></p>
+        </div>
+    </div>
+    <script>
+        // Add event listeners to options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                let siblings = this.parentNode.querySelectorAll('.option');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        function calculateRisk() {
+            const gender = parseInt(document.querySelector('#genderOptions .selected').getAttribute('data-value'));
+            const bloodPressure = parseInt(document.getElementById('bloodPressure').value);
+            const metabolismDisorder = parseInt(document.querySelector('#metabolismOptions .selected').getAttribute('data-value'));
+            const ldl = parseInt(document.getElementById('ldl').value);
+            const hdl = parseInt(document.getElementById('hdl').value);
+            const smoking = parseInt(document.querySelector('#smokingOptions .selected').getAttribute('data-value'));
+            const ageRange = parseInt(document.getElementById('ageRange').value);
+
+            const riskScoreTo10YRisk = [
+                [1, 1, 1.7, 3.4],
+                [1, 1, 1.9, 3.9],
+                [1, 1, 2.2, 4.5],
+                [1, 1.1, 2.6, 5.2],
+                [1, 1.3, 3, 6],
+                [1, 1.4, 3.4, 6.9],
+                [1, 1.7, 3.9, 7.9],
+                [1, 1.9, 4.5, 9.1],
+                [1.1, 2.2, 5.2, 10.4],
+                [1.3, 2.6, 6, 11.9],
+                [1.4, 3, 6.9, 13.6],
+                [1.7, 3.4, 7.9, 15.5],
+                [1.9, 3.9, 9.1, 17.7],
+                [2.2, 4.5, 10.4, 20.2],
+                [2.6, 5.2, 11.9, 22.9],
+                [3, 6, 13.6, 25.9],
+                [3.4, 6.9, 15.5, 29.3],
+                [3.9, 7.9, 17.7, 33],
+                [4.5, 9.1, 20.2, 37],
+                [5.2, 10.4, 22.9, 41.1]
+            ];
+
+            let riskScore = gender + bloodPressure + metabolismDisorder + ldl + hdl + (smoking * 2);
+            riskScore = Math.min(riskScore, riskScoreTo10YRisk.length - 1);
+            const validAgeRange = Math.min(ageRange, riskScoreTo10YRisk[0].length - 1);
+
+            let tenYearRisk = riskScoreTo10YRisk[riskScore][validAgeRange];
+
+            document.getElementById('riskScore').innerText = riskScore;
+            document.getElementById('tenYearRisk').innerText = tenYearRisk.toFixed(1) + '%';
+        }
+    </script>
+<p><font size="3"><a href="https://ecg.watson.jp" target="_blank">other calculators</a></font></p>
+</body>
+</html>
